@@ -12,13 +12,16 @@
         </div>
         
 </ol>
-<% @discounts.each do |discount| %>
+<% @discounts.each_with_index do |discount, index| %>
+    <div id = "discount-<%=index%>">
     <ul>
         <li>Discount: <%=discount.name%></li>
         <li>Threshold: <%=discount.quantity%></li>
         <li>Discount Percentage: <%=discount.discount%></li>
+        <%= button_to("Delete Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{discount.id}", method: :delete)%>
     </ul>
-
+</div>
 <% end %>
+
 
 <%= link_to("Create Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/new") %>
