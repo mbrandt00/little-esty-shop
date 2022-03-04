@@ -1,12 +1,1 @@
-<%= form_with url: "/merchants/#{@merchant.id}/bulk_discounts", method: :post do |f| %>
-  <p><%= f.label :name %></p>
-  <%= f.text_field :name %>
-
-  <p><%= f.label :discount %></p>
-  <%= f.number_field :discount %>
-
-  <p><%= f.label :quantity %></p>
-  <%= f.number_field :quantity %>
-
-  <p> <%= f.submit %> </p>
-<% end %>
+<%= render partial: 'form', locals:{model: @discount} %>
