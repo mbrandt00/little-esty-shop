@@ -5,7 +5,7 @@ class BulkDiscountsController < ApplicationController
     end
 
     def new
-        @merchant = Merchant.find(params[:merchant_id])
+        @discount = BulkDiscount.new
     end
 
     def create 
@@ -15,9 +15,20 @@ class BulkDiscountsController < ApplicationController
         redirect_to("/merchants/#{merchant.id}/bulk_discounts", notice: "Discount Added")
     end
 
+    def edit
+        @discount = BulkDiscount.find(params[:id])
+    end
+
     def show
         @merchant = Merchant.find(params[:merchant_id])
         @discount = BulkDiscount.find(params[:id])
+    end
+
+    def update
+        bulk_discount = BulkDiscount.find(params[:id])
+        bulk_discount.update(bulk_discount_params)
+
+        redirect_to(merchant_bulk_discount_path(bulk_discount.merchant, bulk_discount), notice: "Discount Updated")
     end
 
     def destroy
@@ -27,6 +38,6 @@ class BulkDiscountsController < ApplicationController
     end
     private 
     def bulk_discount_params
-        params.permit(:name, :discount, :quantity)
+        params.require(:bulk_discount).permit(:name, :discount, :quantity)
     end
 end
