@@ -6,3 +6,5 @@
     <li>Threshold: <%= @discount.quantity %></li>
     <li>Discount Percentage: <%= @discount.discount %></li>
 </ul>
+
+<%= link_to("Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @discount))%>
