@@ -1,5 +1,17 @@
 <h1><%= @merchant.name%>'s Bulk Discounts</h1>
 
+<h3>Upcoming Holidays</h3>
+<ol>
+<% service =  NagerApi.new%>
+    <% service.next_three_holidays.each_with_index do |holiday, index| %>
+        <div id = "holiday-<%=index%>"> 
+            <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
+        
+        
+        <% end %>
+        </div>
+        
+</ol>
 <% @discounts.each do |discount| %>
     <ul>
         <li>Discount: <%=discount.name%></li>
