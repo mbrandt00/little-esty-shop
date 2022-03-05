@@ -46,4 +46,22 @@ RSpec.describe 'Admin Invoices Show Page' do
       end
     end
   end
+  describe 'bulk discounts' do 
+    it 'will recognize if there should be a bulk discount for the order' do 
+      merchant = create(:merchant, name: 'Jeff')
+      item_1 = create(:item, name: 'Yo-yo', merchant: merchant)
+      item_2 = create(:item, name: 'Diablo', merchant: merchant)
+      invoice = create(:invoice)
+      large_items = create(:invoice_item, quantity: 20, unit_price: 10, invoice: invoice, item_id: item_1.id)
+      small_items = create(:invoice_item, quantity: 5, unit_price: 10, invoice: invoice, item_id: item_2.id)
+      bulk_discount = merchant.bulk_discounts.create(threshold: 15, discount: 10, name: 'discount a')
+      #binding.pry
+      
+    end
+  end
 end
+
+# As a merchant
+# When I visit my merchant invoice show page
+# Then I see the total revenue for my merchant from this invoice (not including discounts)
+# And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation

@@ -32,8 +32,16 @@ task :transaction, [:filename] => :environment do
   import_data('./db/data/transactions.csv', Transaction)
 end
 
+desc 'Add bulk discounts' 
+task :bulk_discount, [:filename] => :environment do
+  200.times do 
+    Merchant.all.sample.bulk_discounts.create(name: Faker::Date.in_date_period(year: 2022), threshold: rand(1..15), discount: rand(1..30))
+  end
+end
+
 desc 'destroy the tables'
 task destroy_all: :environment do
+  BulkDiscount.destroy_all
   InvoiceItem.destroy_all
   Item.destroy_all
   Merchant.destroy_all
@@ -43,4 +51,4 @@ task destroy_all: :environment do
 end
 
 desc 'Import all in order'
-task all: %i[destroy_all customer invoice transaction merchant item invoiceitem] # ordered appropriately.
+task all: %i[destroy_all customer invoice transaction merchant item invoiceitem bulk_discount]

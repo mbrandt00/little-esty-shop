@@ -16,7 +16,7 @@
     <div id = "discount-<%=index%>">
     <ul>
         <li>Discount: <%=discount.name%></li>
-        <li>Threshold: <%=discount.quantity%></li>
+        <li>Threshold: <%=discount.threshold%></li>
         <li>Discount Percentage: <%=discount.discount%></li>
         <%= button_to("Delete Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{discount.id}", method: :delete)%>
     </ul>
