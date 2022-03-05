@@ -46,15 +46,12 @@ RSpec.describe InvoiceItem, type: :model do
         expect(@invoice_item_1.bulk_discount_percentage).to eq(@bulk_discount_1.discount)
       end
       it 'will add the best discount to each invoice item' do
-        @invoice_item_1.apply_discount
         expect(@invoice_item_1.unit_price).to eq(9.0)
       end
       it 'wont change the unit price if there is no applicable bulk discount' do 
-        @invoice_item_2.apply_discount
         expect(@invoice_item_2.unit_price).to eq(10)
       end
       it 'will apply the best discount avaliable' do 
-        @invoice_item_3.apply_discount
         expect(@invoice_item_3.unit_price).to eq(8)
       end
     end
