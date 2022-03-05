@@ -2,7 +2,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :invoice
   belongs_to :item
 
-  validates :item_id, presence: true, numericality: true
+validates :item_id, presence: true, numericality: true
   validates :invoice_id, presence: true, numericality: true
   validates :unit_price, presence: true, numericality: true
   validates :status, presence: true
@@ -11,7 +11,7 @@ class InvoiceItem < ApplicationRecord
   enum status: { pending: 0, packaged: 1, shipped: 2 }
 
   before_validation :integer_status
-  before_create :apply_discount
+  before_save :apply_discount
   def change_status(result)
     pending! if result == 'pending'
     packaged! if result == 'packaged'
@@ -26,12 +26,16 @@ class InvoiceItem < ApplicationRecord
 
   def apply_discount
     best_discount = item.best_discount(quantity)
-    if best_discount.any? 
+    if best_discount.any?
       set_discount(best_discount.first)
       self.unit_price = (self.unit_price * (1- bulk_discount_percentage/100.to_f))
     end
   end
 
+  def amount_saved
+    (item.unit_price - self.unit_price) * quantity
+  end
+  
   private
 
   def integer_status

@@ -7,23 +7,26 @@
 
 <h1>Invoice Items</h1>
 <% @invoice.invoice_items.each do |invoice_item| %>
-    <div id = "invoice-item-<%=invoice_item.id%>">
+    
     <ul>
+    <div id = "invoice-item-<%=invoice_item.id%>">
         <li>Item: <%=invoice_item.item.name%></li>
         <li>Quantity: <%=invoice_item.quantity%></li>
-        <li>Price: <%=invoice_item.unit_price%></li>
+        <li>Price: <%=number_to_currency(invoice_item.unit_price)%></li>
         <li>Status: <%= invoice_item.status %>
-            <section id="<%=invoice_item.id%>">
                 <%= form_tag("/admin/invoices/#{@invoice.id}/", method: :patch) do %>
                 <%= hidden_field_tag("item_id", invoice_item.id) %>
-                <p> <%= select_tag(:status, options_for_select(["pending", "packaged", "shipped"], params[:status]), include_blank: "Update Status") %> </p>
+                <%= select_tag(:status, options_for_select(["pending", "packaged", "shipped"], params[:status]), include_blank: "Update Status") %>
                 <%= submit_tag("Update") %>
                 <% end %>
-            </section>
+            <% if invoice_item.bulk_discount_id.nil? == false %>
+                <li> Applied Discount: <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </li>
+                <li>Amount Saved: <%= number_to_currency(invoice_item.amount_saved)%></li>
+                <% end %>
         </li>
     </ul>
 
 <% end %>
 </div>
-<h1>Total Revenue</h1>
-<p>Total Revenue: <%=number_to_currency(@invoice.total_revenue)%></p>
+<h3> Revenue</h3>
+<p>Total Revenue Excluding Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>

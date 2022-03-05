@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2022_03_05_141028) do
     t.bigint "item_id"
     t.bigint "invoice_id"
     t.integer "bulk_discount_id"
-    t.integer "bulk_discount_percentage"
+    t.integer "bulk_discount_percentage", default: 0
     t.string "bulk_discount_name"
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_items_on_item_id"

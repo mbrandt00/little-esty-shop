@@ -18,7 +18,6 @@
     <%= hidden_field_tag "invoice_item_id", "#{item.id}" %>
   <%= f.submit 'Update Item Status' %>
   <% end %>
-<p>--------------</p>
 </div>
 <% end %>
-<p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %></p>
+<p>Total Revenue: <%= number_to_currency(@invoice.total_revenue_excluding_discounts) %></p>

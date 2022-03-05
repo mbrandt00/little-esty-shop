@@ -54,24 +54,6 @@ RSpec.describe 'merchants invoices show page' do
     expect(page).to have_content(invoice_item_1.status)
   end
 
-  it 'displays a merchants total revenue' do
-    merchant_1 = create(:merchant)
-    customer_1 = create(:customer)
-    item_1 = create(:item, merchant_id: merchant_1.id)
-    invoice_1 = create(:invoice, customer_id: customer_1.id)
-    invoice_item_1 = create(:invoice_item, item_id: item_1.id, invoice_id: invoice_1.id, unit_price: 20, quantity: 1)
-
-    item_2 = create(:item, merchant_id: merchant_1.id)
-    invoice_item_2 = create(:invoice_item, item_id: item_2.id, invoice_id: invoice_1.id, unit_price: 22, quantity: 1)
-
-    item_3 = create(:item, merchant_id: merchant_1.id)
-    invoice_item_3 = create(:invoice_item, item_id: item_3.id, invoice_id: invoice_1.id, unit_price: 24, quantity: 1)
-
-    visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
-
-    expect(invoice_1.total_revenue).to eq(66)
-  end
-
   it 'shows each invoice item status is a select field where current status is selected' do
     merchant_1 = create(:merchant)
     customer_1 = create(:customer)
