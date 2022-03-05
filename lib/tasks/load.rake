@@ -34,8 +34,17 @@ end
 
 desc 'Add bulk discounts' 
 task :bulk_discount, [:filename] => :environment do
-  200.times do 
-    Merchant.all.sample.bulk_discounts.create(name: Faker::Date.in_date_period(year: 2022), threshold: rand(1..15), discount: rand(1..30))
+  300.times do 
+    discounts = [5,10,15,20]
+    thresholds = [2,5,10,15,20]
+    merchant = Merchant.all.sample
+    if merchant.bulk_discounts.any?
+      discount = merchant.bulk_discounts.last.discount + 5
+      threshold = merchant.bulk_discounts.last.threshold + 5
+      merchant.bulk_discounts.create(name: Faker::Date.in_date_period(year: 2022), threshold: threshold, discount: discount)
+    else
+      merchant.bulk_discounts.create(name: Faker::Date.in_date_period(year: 2022), threshold: thresholds.sample(1).join.to_i, discount: discounts.sample(1).join.to_i)
+    end
   end
 end
 
