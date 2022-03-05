@@ -8,7 +8,7 @@ RSpec.describe "Bulk Discount Show Page" do
     it 'will show the threshold quantity and percentage discount' do 
         visit(merchant_bulk_discount_url(@merchant, @discount))
         expect(page).to have_content(@discount.name)
-        expect(page).to have_content(@discount.quantity)
+        expect(page).to have_content(@discount.threshold)
         expect(page).to have_content(@discount.discount)
     end
     it 'will have a link to edit the bulk discount' do 

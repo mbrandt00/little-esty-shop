@@ -13,8 +13,12 @@ class Invoice < ApplicationRecord
     created_at.strftime('%A, %B %d, %Y')
   end
 
-  def total_revenue
+  def total_revenue_including_discounts
     invoice_items.sum('invoice_items.unit_price * invoice_items.quantity')
+  end
+
+  def total_revenue_excluding_discounts 
+    invoice_items.joins(:item).group(:id).sum('items.unit_price * invoice_items.quantity').sum{|h,k| k}
   end
 
   def self.incomplete_invoices

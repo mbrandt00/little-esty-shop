@@ -25,24 +25,34 @@ RSpec.describe 'Admin Invoices Show Page' do
   end
   it 'will show the total revenue generated from the invoice' do
     visit(admin_invoice_url(@invoice.id))
-    expect(page).to have_content(number_to_currency(@invoice.total_revenue))
+    expect(page).to have_content(number_to_currency(@invoice.total_revenue_excluding_discounts))
   end
   describe "change item on invoice's status" do
     it 'will have a dropdown to update item status' do
       visit(admin_invoice_url(@invoice.id))
-      within "##{@invoice_item_1.id}" do
+      within "#invoice-item-#{@invoice_item_1.id}" do
         expect(page).to have_select(:status, options: ['pending', 'packaged', 'shipped', 'Update Status'])
       end
     end
-    it 'will update the status of an item' do
-      visit(admin_invoice_url(@invoice.id))
-      within "##{@invoice_item_1.id}" do
-        select('shipped')
-        click_on('Update')
-      end
-      expect(current_path).to eq("/admin/invoices/#{@invoice.id}/")
-      within "#invoice-item-#{@invoice_item_1.id}" do
-        expect(page).to have_content('shipped')
+  end
+  describe 'bulk discounts' do
+    before :each do 
+      @merchant = create(:merchant)
+      @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'discount a', merchant: @merchant)
+      @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'discount b', merchant: @merchant)
+
+      @item_1 = create(:item, name: 'Yo-yo', merchant: @merchant)
+      @item_2 = create(:item, name: 'Diablo', merchant: @merchant)
+      @invoice = create(:invoice)
+      @small_invoice_item = create(:invoice_item, quantity: 5, unit_price: 10, invoice: @invoice, item: @item_2)
+      @large_invoice_item = create(:invoice_item, quantity: 20, unit_price: 10, invoice: @invoice, item: @item_1)
+    end
+    it 'will have a link to the bulk discount applied to an invoice item' do 
+      visit(admin_invoice_url(@invoice))
+      within "#invoice-item-#{@small_invoice_item.id}" do
+        expect(page).to have_link("discount a Discount Page")
+        click_link("discount a Discount Page")
+        expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @bulk_discount_1))
       end
     end
   end

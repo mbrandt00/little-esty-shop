@@ -97,6 +97,17 @@ RSpec.describe Item, type: :model do
         best_day = @item_1.best_day
         expect(best_day[0].created_at).to eq('2012-03-21 14:54:09')
       end
+      it 'can return the best discount an item has by quantity' do 
+        merchant = create(:merchant, name: 'Jeff')
+        item_1 = create(:item, name: 'Yo-yo', merchant: merchant)
+        small_bulk_discount = merchant.bulk_discounts.create(threshold: 5, discount: 10, name: 'discount a')
+        large_bulk_discount = merchant.bulk_discounts.create(threshold: 10, discount: 20, name: 'discount b')
+        expect(item_1.best_discount(9).first.discount).to eq(10)
+        expect(item_1.best_discount(9).first.name).to eq('discount a')
+        expect(item_1.best_discount(10).first.discount).to eq(20)
+        expect(item_1.best_discount(10).first.name).to eq('discount b')
+        expect(item_1.best_discount(100).first.discount).to eq(20)
+      end
     end
   end
 end
