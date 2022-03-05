@@ -7,15 +7,21 @@
 <p>Last Name: <%= @invoice.customer.last_name %></p>
 
 <h3>Invoice Item Information</h3>
-<% @invoice.invoice_items.each do |item| %>
-  <div id="<%= item.id %>">
-  <p>Name: <%= item.item.name %></p>
-  <p>Quantity: <%= item.quantity %></p>
-  <p>Price: <%= number_to_currency(item.unit_price) %></p>
-  <p>Status: <%= item.status %></p>
+<% @invoice.invoice_items.each do |invoice_item| %>
+  <div id="<%= invoice_item.id %>">
+  <p>Name: <%= invoice_item.item.name %></p>
+  <p>Quantity: <%= invoice_item.quantity %></p>
+  <p>Price: <%= number_to_currency(invoice_item.unit_price) %></p>
+  <p>Status: <%= invoice_item.status %></p>
+  <% if invoice_item.bulk_discount_id.nil? == false %>
+  <p><%= 
+  link_to("Bulk Discount Link", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.bulk_discount_id)) %></p>
+  
+  <% end %>
+  
   <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}", method: :patch do |f| %>
-    <%= f.select :status, ['pending', 'packaged', 'shipped'], selected: item.status %>
-    <%= hidden_field_tag "invoice_item_id", "#{item.id}" %>
+    <%= f.select :status, ['pending', 'packaged', 'shipped'], selected: invoice_item.status %>
+    <%= hidden_field_tag "invoice_item_id", "#{invoice_item.id}" %>
   <%= f.submit 'Update Item Status' %>
   <% end %>
 </div>
