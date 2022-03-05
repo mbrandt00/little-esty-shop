@@ -27,4 +27,11 @@ class Item < ApplicationRecord
             .order(count: :desc, created_at: :desc)
             .limit(1)
   end
+  def best_discount(quantity)
+    merchant.
+    bulk_discounts.
+    where("bulk_discounts.threshold <= ?", quantity).
+    order('bulk_discounts.discount desc').
+    limit(1)
+  end
 end
