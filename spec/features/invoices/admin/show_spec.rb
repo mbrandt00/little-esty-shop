@@ -55,5 +55,9 @@ RSpec.describe 'Admin Invoices Show Page' do
         expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @bulk_discount_1))
       end
     end
+    it 'will list show revenue with the discount' do 
+      visit(admin_invoice_url(@invoice))
+      expect(page).to have_content(number_to_currency(@invoice.total_revenue_including_discounts))
+    end
   end
 end

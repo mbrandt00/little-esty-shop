@@ -20,8 +20,8 @@
                 <%= submit_tag("Update") %>
                 <% end %>
             <% if invoice_item.bulk_discount_id.nil? == false %>
-                <li> Applied Discount: <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </li>
-                <li>Amount Saved: <%= number_to_currency(invoice_item.amount_saved)%></li>
+                <p> Applied Discount: <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </p>
+                <p>Amount Saved: <%= number_to_currency(invoice_item.amount_saved)%></p>
                 <% end %>
         </li>
     </ul>
@@ -29,4 +29,5 @@
 <% end %>
 </div>
 <h3> Revenue</h3>
-<p>Total Revenue Excluding Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>
+<p>Excluding Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>
+<p>Including Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_including_discounts)%></p>
