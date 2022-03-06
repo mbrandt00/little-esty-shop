@@ -41,8 +41,8 @@ RSpec.describe 'Admin Invoices Show Page' do
       @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'discount a', merchant: @merchant)
       @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'discount b', merchant: @merchant)
 
-      @item_1 = create(:item, name: 'Yo-yo', merchant: @merchant)
-      @item_2 = create(:item, name: 'Diablo', merchant: @merchant)
+      @item_1 = create(:item, name: 'Yo-yo', merchant: @merchant, unit_price: 10)
+      @item_2 = create(:item, name: 'Diablo', merchant: @merchant, unit_price: 10)
       @invoice = create(:invoice)
       @small_invoice_item = create(:invoice_item, quantity: 5, unit_price: 10, invoice: @invoice, item: @item_2)
       @large_invoice_item = create(:invoice_item, quantity: 20, unit_price: 10, invoice: @invoice, item: @item_1)
@@ -58,6 +58,15 @@ RSpec.describe 'Admin Invoices Show Page' do
     it 'will list show revenue with the discount' do 
       visit(admin_invoice_url(@invoice))
       expect(page).to have_content(number_to_currency(@invoice.total_revenue_including_discounts))
+    end
+    it 'will show the amount saved per item' do 
+        visit(admin_invoice_url(@invoice))
+        within "#invoice-item-#{@small_invoice_item.id}" do 
+          expect(page).to have_content("Amount Saved: #{number_to_currency(@small_invoice_item.amount_saved)}")
+        end
+        within "#invoice-item-#{@large_invoice_item.id}" do 
+          expect(page).to have_content("Amount Saved: #{number_to_currency(@large_invoice_item.amount_saved)}")
+        end
     end
   end
 end
