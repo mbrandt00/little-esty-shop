@@ -6,10 +6,14 @@
     <% service.next_three_holidays.each_with_index do |holiday, index| %>
         <div id = "holiday-<%=index%>"> 
             <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
+            <%= link_to("Create Discount", new_merchant_bulk_discount_path(name: 'discount', discount: 30, threshold: 2)) %> 
+            </div>
         <% end %>
-        </div>
+
         
 </ol>
+<div class = "Discounts">
+<h3>Discounts</h3>
 <% @discounts.each_with_index do |discount, index| %>
     <div id = "discount-<%=index%>">
     <ul>
@@ -20,6 +24,6 @@
     </ul>
 </div>
 <% end %>
-
+</div>
 
 <%= link_to("Create Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/new") %>

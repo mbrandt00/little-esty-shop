@@ -1,11 +1,11 @@
 <%= form_with(model: [:merchant, model], local: true) do |f| %>
   <p><%= f.label :name %></p>
-  <%= f.text_field :name %>
+  <%= f.text_field :name, :value => params[:name] %>
 
   <p><%= f.label :discount %></p>
-  <%= f.number_field :discount %>
+  <%= f.number_field :discount, :value => params[:discount] %>
 
   <p><%= f.label :threshold %></p>
-  <%= f.number_field :threshold %>
+  <%= f.number_field :threshold, :value => params[:threshold] %>
   <p> <%= f.submit %> </p>
 <% end %>

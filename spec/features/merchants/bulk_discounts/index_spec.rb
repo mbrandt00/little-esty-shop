@@ -32,4 +32,38 @@ RSpec.describe 'Bulk Discounts index page' do
             expect(page).to_not have_content(bulk_discount_1.name)
        end
     end
+    describe 'creating bulk discount from holiday' do 
+        it 'will have a button to create a bulk discount' do 
+            visit(merchant_bulk_discounts_url(@merchant))
+            within "#holiday-0" do 
+                expect(page).to have_link("Create Discount")
+                click_link("Create Discount")
+                expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant))
+            end
+        end
+        it 'will prepopulate with the required info' do 
+            visit(merchant_bulk_discounts_url(@merchant))
+            within "#holiday-0" do 
+                expect(page).to have_link("Create Discount")
+                click_link("Create Discount")
+            end
+            expect(page).to have_field('bulk_discount[discount]', with: 30)
+            expect(page).to have_field('bulk_discount[threshold]', with: 2)
+            expect(page).to have_field('bulk_discount[name]', with: 'discount')
+        end
+        it 'fields can be changed' do 
+            visit(merchant_bulk_discounts_url(@merchant))
+            within "#holiday-0" do 
+                expect(page).to have_link("Create Discount")
+                click_link("Create Discount")
+            end
+            fill_in 'bulk_discount[threshold]', with: 5
+            click_button("Create Bulk discount")
+            save_and_open_page
+            expect(page).to have_content(5)
+
+
+        end
+    end
 end
+
