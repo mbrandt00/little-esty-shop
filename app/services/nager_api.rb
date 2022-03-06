@@ -1,5 +1,3 @@
-
-
 class NagerApi
 
     def conn 

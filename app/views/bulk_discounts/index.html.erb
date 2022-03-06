@@ -6,8 +6,6 @@
     <% service.next_three_holidays.each_with_index do |holiday, index| %>
         <div id = "holiday-<%=index%>"> 
             <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
-        
-        
         <% end %>
         </div>
         
