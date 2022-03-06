@@ -57,6 +57,7 @@ task :bulk_discount, [:filename] => :environment do
     merchant = Merchant.all.sample
     if merchant.bulk_discounts.any?
       discount = merchant.bulk_discounts.last.discount + 5
+      next if merchant.bulk_discounts.last.discount > 25
       threshold = merchant.bulk_discounts.last.threshold + 2
       merchant.bulk_discounts.create(name: Faker::Date.in_date_period(year: 2022), threshold: threshold, discount: discount)
     else
