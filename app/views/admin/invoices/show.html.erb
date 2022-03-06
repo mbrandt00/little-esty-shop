@@ -12,7 +12,7 @@
     <div id = "invoice-item-<%=invoice_item.id%>">
         <li>Item: <%=invoice_item.item.name%></li>
         <li>Quantity: <%=invoice_item.quantity%></li>
-        <li>Price: <%=number_to_currency(invoice_item.unit_price)%></li>
+        <li>Unit Price: <%=number_to_currency(invoice_item.unit_price)%> (<%= invoice_item.bulk_discount_percentage if invoice_item.bulk_discount_percentage.present?%>% discount applied)</li>
         <li>Status: <%= invoice_item.status %>
                 <%= form_tag("/admin/invoices/#{@invoice.id}/", method: :patch) do %>
                 <%= hidden_field_tag("item_id", invoice_item.id) %>
@@ -20,14 +20,14 @@
                 <%= submit_tag("Update") %>
                 <% end %>
             <% if invoice_item.bulk_discount_id.nil? == false %>
-                <p> Applied Discount: <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </p>
+                <p> <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </p>
                 <p>Amount Saved: <%= number_to_currency(invoice_item.amount_saved)%></p>
                 <% end %>
         </li>
     </ul>
-
-<% end %>
 </div>
+<% end %>
+
 <h3> Revenue</h3>
 <p>Excluding Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>
 <p>Including Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_including_discounts)%></p>
