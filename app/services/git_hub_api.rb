@@ -16,12 +16,12 @@ class GitHubApi
   end
 
   def pull_requests
-    response = @conn.get('/repos/stevenjames-turing/little-esty-shop/pulls?state=closed&per_page=100')
+    response = @conn.get('/repos/mbrandt00/little-esty-shop/pulls?state=closed&per_page=100')
     github = JSON.parse(response.body, symbolize_names: true)
   end
 
   def contributors
-    response = @conn.get('/repos/stevenjames-turing/little-esty-shop/contributors')
+    response = @conn.get('/repos/mbrandt00/little-esty-shop/contributors')
     github = JSON.parse(response.body, symbolize_names: true)
     github.map do |contributor|
       Contributor.new(contributor)
@@ -29,7 +29,7 @@ class GitHubApi
   end
 
   def commits
-    response = @conn.get('/repos/stevenjames-turing/little-esty-shop/commits?per_page=100')
+    response = @conn.get('/repos/mbrandt00/little-esty-shop/commits?per_page=100')
     github = JSON.parse(response.body, symbolize_names: true)
     github.map do |commit|
       Commit.new(commit)
@@ -41,16 +41,15 @@ class GitHubApi
     @commits.each do |commit|
       count_hash[commit.username] += 1
     end
-    count_hash['Merges'] = count_hash.delete('Steven James (he/him)')
     count_hash
   end
 
   def repo
-    response = @conn.get('users/stevenjames-turing/repos')
+    response = @conn.get('users/mbrandt00/repos?per_page=100')
     github = JSON.parse(response.body, symbolize_names: true)
     repos = github.map do |repo|
       Repo.new(repo)
     end
-    repos.find { |repo| repo.name == 'stevenjames-turing/little-esty-shop' }
+    repos.find { |repo| repo.name == "mbrandt00/little-esty-shop" }
   end
 end
