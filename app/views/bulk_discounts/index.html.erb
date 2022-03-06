@@ -6,7 +6,13 @@
     <% service.next_three_holidays.each_with_index do |holiday, index| %>
         <div id = "holiday-<%=index%>"> 
             <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
-            <%= link_to("Create Discount", new_merchant_bulk_discount_path(name: 'discount', discount: 30, threshold: 2)) %> 
+            <% if @discounts.map(&:date).include?(holiday[:date])%>
+                <%= link_to("View Discount", merchant_bulk_discount_path(@merchant, (@discounts.where(date: holiday[:date]).first)))%>
+            <% else %>
+            <%= link_to("Create Discount", new_merchant_bulk_discount_path(date: holiday[:date])) %> 
+            
+            <% end %>
+            
             </div>
         <% end %>
 
@@ -17,6 +23,7 @@
 <% @discounts.each_with_index do |discount, index| %>
     <div id = "discount-<%=index%>">
     <ul>
+        <li><%= link_to("View Discount", merchant_bulk_discount_path(@merchant, discount)) %></li>
         <li>Discount: <%=discount.name%></li>
         <li>Threshold: <%=discount.threshold%></li>
         <li>Discount Percentage: <%=discount.discount%></li>

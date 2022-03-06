@@ -32,6 +32,15 @@ RSpec.describe 'Bulk Discounts index page' do
             expect(page).to_not have_content(bulk_discount_1.name)
        end
     end
+    it 'will have a link to go to the bulk discount show page' do
+        bulk_discount_1 = create(:bulk_discount, merchant: @merchant)
+        visit(merchant_bulk_discounts_url(@merchant))
+        within "#discount-0" do
+            expect(page).to have_link("View Discount")
+            click_link("View Discount")
+        end
+        expect(current_path).to eq(merchant_bulk_discount_path(@merchant, bulk_discount_1))
+    end
     describe 'creating bulk discount from holiday' do 
         it 'will have a button to create a bulk discount' do 
             visit(merchant_bulk_discounts_url(@merchant))
@@ -59,10 +68,7 @@ RSpec.describe 'Bulk Discounts index page' do
             end
             fill_in 'bulk_discount[threshold]', with: 5
             click_button("Create Bulk discount")
-            save_and_open_page
             expect(page).to have_content(5)
-
-
         end
     end
 end
