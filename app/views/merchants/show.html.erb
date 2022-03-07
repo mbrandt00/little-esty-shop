@@ -1,24 +1,45 @@
-<h1><%= @merchant.name %></h1>
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text"><%= @merchant.name %></p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', "/merchants/#{@merchant.id}/dashboard", class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Items', merchant_merchant_items_path(@merchant), class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', merchant_invoices_path(@merchant), class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
+</div>
 
-<%= link_to "My Items", "/merchants/#{@merchant.id}/merchant_items" %>
-<%= link_to "My Invoices", "/merchants/#{@merchant.id}/invoices" %>
 <br>
-<%= render partial: 'sortable' %>
-
-<section id="favorite_customers">
-<h3>Favorite Customers</h3>
-<% @merchant.favorite_customers(5).each do |customer| %>
-    <%= "#{customer.first_name} #{customer.last_name} - #{Customer.transaction_count(customer.id)} purchases" %> <br>
-<% end %>
-</section>
-
-<section id="ready_to_ship">
-<h3>Items Ready to Ship</h3>
-<% sortable(@merchant.items_ready_to_ship, params).each do |irts| %>
-    <%= "#{irts.name} - " %> <%= link_to "Invoice ##{irts.id}", "/merchants/#{@merchant.id}/invoices/#{irts.id}" %> 
-    <%= "- #{date_formatter(irts.created_at)}" %><br>
-<% end %>
-</section>
-
+<div class="container">
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1><%=@merchant.name%>'s Dashboard</h1>
+    </div>
+  </div>
+    <div class="row">
+        <div class="col">
+            <section id="ready_to_ship">
+                <h3 class="text-center">Items Ready to Ship</h3>
+                <p class="text-center"></p>
+                <p><% @merchant.items_ready_to_ship.each do |item| %>
+                    <p><%= item.name %> - Invoice
+                        #<%= link_to "#{item.invoice_ids}", "/merchants/#{@merchant.id}/invoices/#{item.invoice_ids[0]}" %>
+                        <%= item.created_at.strftime("%A, %B %-d, %Y") %></p>
+                    <% end %>
+                </p>
+            </section>
+        </div>
+        <div class="col">
+            <section id="favorite_customers">
+                <h3 class="text-center">Favorite Customers</h3>
+                <ol>
+                    <% @merchant.favorite_customers.each do |customer| %>
+                    <li> <%= "#{customer.first_name} #{customer.last_name} - #{customer.top_result} purchases" %> </li>
+                    <% end %>
+                </ol>
+            </section>
+        </div>
+    </div>
+</div>
 
 <%= link_to("View Bulk Discounts", "/merchants/#{@merchant.id}/bulk_discounts") %>

@@ -1,50 +1,77 @@
-<h1> <%=@merchant.name%>'s Items </h1>
-<div class = enabled>
-<h3> Enabled Items </h3>
-<% @merchant.items.enabled.each do |item| %>
-
-      <ul>
-        <li>
-          <a href="/merchants/<%=@merchant.id%>/merchant_items/<%=item.id%>">
-            <%= item.name%>
-          </a>
-          <%= button_to("Disable", "/merchants/#{item.merchant.id}/merchant_items/#{item.id}/", method: :patch, name: "status",value: "disable") %>
-        </li>
-      </ul>
-<% end %>
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text"><%= @merchant.name %></p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', "/merchants/#{@merchant.id}/dashboard", class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Items', merchant_merchant_items_path(@merchant), class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', merchant_invoices_path(@merchant), class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
 </div>
 
-<div class = disabled>
-<h3> Disabled Items </h3>
-<% @merchant.items.disabled.each do |item| %>
 
-      <ul>
-        <li>
-          <a href="/merchants/<%=@merchant.id%>/merchant_items/<%=item.id%>">
-            <%= item.name%>
-          </a>
-          <%=button_to("Enable", "/merchants/#{item.merchant.id}/merchant_items/#{item.id}/", method: :patch, name: "status",value: "enable")%>
-        </li>
-      </ul>
-<% end %>
-</div>
+<h1> </h1>
+<div class="container">
 
-<div class = most_popular>
-<h3>Most Popular Items</h3>
-<% @most_popular_items.each do |item| %>
-  <div id= item-<%=item.id%>> 
-      <ul>
-        <li>
-          <a href="/merchants/<%=@merchant.id%>/merchant_items/<%=item.id%>">
-            <%= item.name%> </a> Total Revenue: <%= number_to_currency(item.revenue)%>
-          
-        </li>
-        <li>Top Selling Date for <%= item.name %> was <%= date_formatter(item.best_day.first.created_at)%> with <%= item.best_day.first.count %> sales.</li>
-      </ul>
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1><%=@merchant.name%>'s Items</h1>
+    </div>
   </div>
-<% end %>
-</div>
-<div class = create>
-<%= link_to("Create Item", "/merchants/#{@merchant.id}/merchant_items/new" ) %>
-</div> 
 
+  <div class="row">
+    <div class="col-sm-12 first-column d-flex">
+      <div class=create>
+        <%= link_to("Create Item", new_merchant_merchant_item_path ) %>
+      </div>
+    </div>
+    <div class="col-sm-3 first-column d-flex">
+      <div class=enabled>
+        <h3> Enabled Items </h3>
+        <% @merchant.items.enabled.each do |item| %>
+        <p>
+          <div style="float: left; width: 400px"><%=link_to(item.name, merchant_merchant_item_path(@merchant,item))%>
+          </div>
+          <%= button_to("Disable", "/merchants/#{item.merchant.id}/merchant_items/#{item.id}/", method: :patch, name: "status",value: "disable") %>
+        </p>
+
+        <% end %>
+
+      </div>
+    </div>
+    <div class="col-sm-3 second-column d-flex">
+      <div class=disabled>
+        <h3> Disabled Items </h3>
+        <% @merchant.items.disabled.each do |item| %>
+
+        <p>
+          <div style="float: left; width: 100%"><%=link_to(item.name, merchant_merchant_item_path(@merchant,item))%>
+          </div>
+          <%=button_to("Enable", "/merchants/#{item.merchant.id}/merchant_items/#{item.id}/", method: :patch, name: "status",value: "enable")%>
+        </p>
+
+
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm-4 third-column">
+      <div class=most_popular>
+        <h3>Top Items</h3>
+        <ol>
+          <% @most_popular_items.each do |item| %>
+          <div id=item-<%=item.id%>>
+
+            <li> <%= link_to( item.name ,merchant_merchant_item_path(@merchant,item))%>
+
+              <p> Total Revenue: <%= number_to_currency(item.revenue)%> </p>
+
+
+              <p>Top Selling Date for <%= item.name %> was <%= date_formatter(item.best_day.first.created_at)%> with
+                <%= item.best_day.first.count %> sales.</p>
+            </li>
+          </div>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

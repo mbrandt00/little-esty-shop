@@ -1,13 +1,27 @@
-<h1> <%= @item.name %> </h1>
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text"><%= @merchant.name %></p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', "/merchants/#{@merchant.id}/dashboard", class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Items', merchant_merchant_items_path(@merchant), class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', merchant_invoices_path(@merchant), class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
+</div>
 <% flash.each do |type, msg| %>
-  <div class="alert alert-info">
-    <%= msg %>
-  </div>
+<div class="alert alert-info">
+  <%= msg %>
+</div>
 <% end %>
-<ul>
-    <li> Description: <%= @item.description%>
-    </li>
-    <li> Current Selling Price: <%= number_to_currency(@item.unit_price)%>
-    </li>
-</ul>
-<%= link_to "Edit item", "/merchants/#{@item.merchant.id}/merchant_items/#{@item.id}/edit"%>
+
+<div class="container">
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1><%=@item.name%></h1>
+    </div>
+  </div>
+
+    <p> Description: <%= @item.description%>
+    </p>
+  <p> Current Price: <%= number_to_currency(@item.unit_price)%> </p>
+    <p><%= link_to "Update Item", "/merchants/#{@item.merchant.id}/merchant_items/#{@item.id}/edit"%> </p>

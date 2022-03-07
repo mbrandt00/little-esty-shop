@@ -1,31 +1,40 @@
-<h1>Admin Dashboard</h1>
-
-<h3>Directing Links</h3>
-<ul>
-        <li> <%= link_to("Admin Merchants Index", admin_merchants_url) %></li>
-        <li> <%= link_to("Admin Invoices Index", admin_invoices_url) %></li>
-</ul>
-<div class = "top_customers">
-<h3>Top Customers</h3>
-    <% @top_customers.each do |customer| %>
-    <ul>
-        <li>Customer: <%="#{customer.first_name} #{customer.last_name} "%> </li>
-        <li>Successful Transactions: <%=" #{customer.count}" %>
-        </li>
-    </ul>
-
-    <% end %>
-
+<div class="nav-container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <p class="navbar-text">Admin</p>
+        <ul class="nav navbar-nav">
+            <li><%= link_to 'Dashboard', admin_dashboard_index_url, class: 'link_1', style: 'pull-right' %>
+            <li><%= link_to 'Merchants', admin_merchants_url, class: 'link_1', style: 'pull-right' %>
+            <li><%= link_to 'Invoices', admin_invoices_url, class: 'link_1', style: 'pull-right' %>
+        </ul>
+    </nav>
 </div>
+<div class="container">
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1>Dashboard</h1>
+    </div>
+  </div>
 
-<div class = "incomplete_invoices">
-<h3>Incomplete Invoices</h3>
-<% @incomplete.each do |invoice|  %>
-    <ul>
-        <li><a href = "/admin/invoices/<%= "#{invoice.id}"%>"> <%= invoice.id%> </a></li>
-        <li>Created: <%= date_formatter(invoice.created_at)%></li>
-    </ul>
-
-    <% end %>
-
+    <br>
+    <div class="row">
+        <div class="col">
+            <div class="incomplete_invoices">
+                <h3>Incomplete Invoices</h3>
+                <% @incomplete.each do |invoice|  %>
+                <p><%= link_to("Invoice ##{invoice.id}", admin_invoice_path(invoice)) %>
+                    <p>Created: <%= date_formatter(invoice.created_at) %>
+                        <% end %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="top_customers">
+                <h3>Top Customers</h3>
+                <ol>
+                    <% @top_customers.each do |customer| %>
+                    <li><%="#{customer.first_name} #{customer.last_name} - #{customer.count} purchases"%> </li>
+                    <% end %>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
