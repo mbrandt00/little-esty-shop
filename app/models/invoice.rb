@@ -29,6 +29,12 @@ class Invoice < ApplicationRecord
       .order('invoices.created_at')
   end
 
+    def change_status(result)
+    self.status = 0 if result == 'in progress'
+    completed! if result == 'completed'
+    cancelled! if result == 'cancelled'
+  end
+
   private
 
   def integer_status

@@ -12,11 +12,7 @@ validates :item_id, presence: true, numericality: true
 
   before_validation :integer_status
   before_save :apply_discount
-  def change_status(result)
-    pending! if result == 'pending'
-    packaged! if result == 'packaged'
-    shipped! if result == 'shipped'
-  end
+
 
   def set_discount(bulk_discount)
     self.bulk_discount_id = bulk_discount.id
