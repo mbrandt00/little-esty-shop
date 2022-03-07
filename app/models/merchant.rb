@@ -2,6 +2,9 @@ class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :invoice_items, through: :items
   has_many :bulk_discounts
+  has_many :invoices, through: :invoice_items
+  has_many :customers, through: :invoices
+  has_many :transactions, through: :invoices
 
   enum status: { enabled: 0, disabled: 1 }
 
@@ -16,21 +19,22 @@ class Merchant < ApplicationRecord
       .limit(count)
   end
 
-  def favorite_customers(count)
-    Merchant.joins(invoice_items: [invoice: [customer: :transactions]])
-            .where(merchants: { id: id }, transactions: { result: 0 })
-            .select('customers.*')
-            .group('customers.id')
-            .order(count: :desc)
-            .limit(count)
-  end
+  def favorite_customers
+      transactions.joins(invoice: :customer)
+                .where('result = ?', 0)
+                .where("invoices.status = ?", 1)
+                .select("customers.*, count('transactions.result') as top_result")
+                .group('customers.id')
+                .order(top_result: :desc)
+                .distinct
+                .limit(5)
+  end                  
 
   def items_ready_to_ship
-    Merchant.joins(invoice_items: [invoice: :transactions])
-            .where(merchants: { id: id }, invoice_items: { status: [0,
-                                                                    1] }, invoices: { status: [0, 1] }, transactions: { result: 0 })
-            .select('items.name, invoices.id, invoices.created_at')
-            .order('invoices.created_at ASC')
+    item_ids = InvoiceItem.where("status = 1 OR status = 2").order(:created_at).pluck(:item_id)
+    item_ids.map do |id|
+      Item.find(id)
+    end
   end
 
   def best_day
