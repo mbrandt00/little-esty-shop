@@ -8,8 +8,8 @@ class Admin::InvoicesController < ApplicationController
   end
 
   def update
-    invoice_item = InvoiceItem.find(params[:item_id])
-    invoice_item.change_status(params[:status]) if params[:status].present?
+    invoice = Invoice.find(params[:id])
+    invoice.change_status(params[:status]) if params[:status].present?
     redirect_to "/admin/invoices/#{params[:id]}/"
   end
 end

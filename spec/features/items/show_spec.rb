@@ -17,7 +17,7 @@ RSpec.describe 'Item Show page' do
   end
   it 'will have a link to edit the item that will redirect to the edit page' do
     visit "/merchants/#{@merchant_1.id}/merchant_items/#{@item_1.id}"
-    click_link 'Edit item'
+    click_link 'Update Item'
     expect(current_path).to eq("/merchants/#{@item_1.merchant.id}/merchant_items/#{@item_1.id}/edit")
   end
 end
