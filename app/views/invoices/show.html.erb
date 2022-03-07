@@ -1,29 +1,53 @@
 <h1>Invoice Information</h1>
-
-<p>ID: <%= @invoice.id %></p>
-<p>Status: <%= @invoice.status %></p>
-<p>Created: <%= @invoice.created_at_date %></p>
-<p>First Name: <%= @invoice.customer.first_name %></p>
-<p>Last Name: <%= @invoice.customer.last_name %></p>
-
-<h3>Invoice Item Information</h3>
-<% @invoice.invoice_items.each do |invoice_item| %>
-  <div id="<%= invoice_item.id %>">
-  <p>Name: <%= invoice_item.item.name %></p>
-  <p>Quantity: <%= invoice_item.quantity %></p>
-  <p>Price: <%= number_to_currency(invoice_item.unit_price) %></p>
-  <p>Status: <%= invoice_item.status %></p>
-  <% if invoice_item.bulk_discount_id.nil? == false %>
-  <p><%= 
-  link_to("Bulk Discount Link", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.bulk_discount_id)) %></p>
-  
-  <% end %>
-  
-  <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}", method: :patch do |f| %>
-    <%= f.select :status, ['pending', 'packaged', 'shipped'], selected: invoice_item.status %>
-    <%= hidden_field_tag "invoice_item_id", "#{invoice_item.id}" %>
-  <%= f.submit 'Update Item Status' %>
-  <% end %>
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text"><%= @merchant.name %></p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', "/merchants/#{@merchant.id}/dashboard", class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Items', merchant_merchant_items_path(@merchant), class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', merchant_invoices_path(@merchant), class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
 </div>
-<% end %>
-<p>Total Revenue: <%= number_to_currency(@invoice.total_revenue_excluding_discounts) %></p>
+
+<div class="container">
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1>Invoice #<%=@invoice.id%></h1>
+    </div>
+  </div>
+  <p> Status: <%= @invoice.status %></p>
+  <p> Created on: <%= @invoice.created_at_date %></p>
+  <h3>Customer:</h3>
+  <p><%="#{@invoice.customer.first_name} #{@invoice.customer.last_name}"%> </p>
+  <h3>Revenue</h3>
+  <p>Before Discounts: <%= number_to_currency(@invoice.total_revenue_excluding_discounts) %></p>
+  <p>After Discounts: <%= number_to_currency(@invoice.total_revenue_including_discounts) %></p>
+  <h3>Items on this Invoice</h3>
+  <table class="table">
+    <thead>
+      <th> Invoice Item</th>
+      <th> Quantity</th>
+      <th> Original Unit Price</th>
+      <th> Unit Price</th>
+      <th> Discount (if avaliable)</th>
+      <th> Status</th>
+    </thead>
+    <% @invoice.invoice_items.each do |invoice_item| %>
+    <tr>
+      <td><%= invoice_item.item.name %></td>
+      <td><%= invoice_item.quantity %></td>
+      <td><%= number_to_currency(invoice_item.item.unit_price) %></td>
+      <td><%= number_to_currency(invoice_item.unit_price) %></td>
+      <td> <%= link_to("#{invoice_item.bulk_discount_percentage}% Discount", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.bulk_discount_id)) if invoice_item.bulk_discount_id.present? %></td>
+      <td> <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}", method: :patch do |f| %>
+        
+        <%= f.select :status, options_for_select(@invoice.invoice_items.map(&:status).uniq, invoice_item.status), {}, { class: "form form-group form-control" } %>
+        <%= hidden_field_tag "invoice_item_id", "#{invoice_item.id}" %>
+        <%= f.submit 'Update Item Status', class:"btn btn-default" %>
+        <% end %> </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+

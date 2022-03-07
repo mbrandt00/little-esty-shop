@@ -1,46 +1,66 @@
-<h1>Merchants</h1>
-
-<p><%= link_to "New Merchant", "/admin/merchants/new" %></p>
-<%= render partial: 'sortable' %>
-
-<div class = top_merchants>
-<h3> Top Merchants </h3>
-<ol>
-<% Merchant.top_merchants(5).each do |merchant| %>
-  <li>
-    <%= link_to "#{merchant.name}", "/admin/merchants/#{merchant.id}" %>
-    <%= "- #{number_to_currency(merchant.revenue)} in sales" %>
-    <br>
-    <%= "Top selling date for #{merchant.name} was #{date_formatter(merchant.best_day.first.created_at)}" %>
-  </li>
-<% end %>
-</ol>
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <p class="navbar-text">Admin</p>
+    <ul class="nav navbar-nav">
+      <li><%= link_to 'Dashboard', admin_dashboard_index_url, class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Merchants', admin_merchants_url, class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', admin_invoices_url, class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
 </div>
 
-<div class = enabled>
-<h3> Enabled Merchants </h3>
-<% @merchants.each do |merchant| %>
-    <% if merchant.status == "enabled" %>
-      <ul>
+<div class="container">
+  <div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1>Merchants</h1>
+    </div>
+  </div>
+  <div class = "row">
+      <p><%= link_to "New Merchant", "/admin/merchants/new" %></p>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class=top_merchants>
+        <div class=enabled>
+          <h3> Enabled Merchants </h3>
+          <% @merchants.each do |merchant| %>
+          <% if merchant.status == "enabled" %>
+          <ul>
+            <li>
+              <%= merchant.name%>
+              <%= button_to("Disable", "/admin/merchants/#{merchant.id}/", method: :patch, name: "status",value: "disable") %>
+            </li>
+          </ul>
+          <% end %>
+          <% end  %>
+        </div>
+        <div class=disabled>
+          <h3> Disabled Merchants </h3>
+          <% @merchants.each do |merchant| %>
+          <% if merchant.status == "disabled" %>
+          <ul>
+            <li>
+              <%= merchant.name%>
+              <%=button_to("Enable", "/admin/merchants/#{merchant.id}/", method: :patch, name: "status",value: "enable")%>
+            </li>
+          </ul>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <h3> Top Merchants </h3>
+      <ol>
+        <% Merchant.top_merchants(5).each do |merchant| %>
         <li>
-          <%= merchant.name%>
-          <%= button_to("Disable", "/admin/merchants/#{merchant.id}/", method: :patch, name: "status",value: "disable") %>
+          <%= link_to "#{merchant.name}", "/admin/merchants/#{merchant.id}" %>
+          <%= "- #{number_to_currency(merchant.revenue)} in sales" %>
+          <br>
+          <%= "Top selling date for #{merchant.name} was #{date_formatter(merchant.best_day.first.created_at)}" %>
         </li>
-      </ul>
-    <% end %>
-<% end  %>
-</div>
-
-<div class = disabled>
-<h3> Disabled Merchants </h3>
-<% @merchants.each do |merchant| %>
-    <% if merchant.status == "disabled" %>
-      <ul>
-        <li>
-          <%= merchant.name%>
-          <%=button_to("Enable", "/admin/merchants/#{merchant.id}/", method: :patch, name: "status",value: "enable")%>
-        </li>
-      </ul>
-    <% end %>
-<% end %>
+        <% end %>
+      </ol>
+    </div>
+  </div>
 </div>

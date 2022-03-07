@@ -1,33 +1,54 @@
-<h1>Admin Invoice Show Page</h1>
-<h3>Invoice id: <%= @invoice.id %> </h3>
-<h3>Invoice Status: <%= @invoice.status %> </h3>
-<h3>Created <%= date_formatter(@invoice.created_at) %> </h3>
-<h3>Customer's First Name: <%= @invoice.customer.first_name%> </h3>
-<h3>Customer's Last Name: <%= @invoice.customer.last_name %> </h3>
-
-<h1>Invoice Items</h1>
-<% @invoice.invoice_items.each do |invoice_item| %>
-    
-    <ul>
-    <div id = "invoice-item-<%=invoice_item.id%>">
-        <li>Item: <%=invoice_item.item.name%></li>
-        <li>Quantity: <%=invoice_item.quantity%></li>
-        <li>Unit Price: <%=number_to_currency(invoice_item.unit_price)%> (<%= invoice_item.bulk_discount_percentage if invoice_item.bulk_discount_percentage.present?%>% discount applied)</li>
-        <li>Status: <%= invoice_item.status %>
-                <%= form_tag("/admin/invoices/#{@invoice.id}/", method: :patch) do %>
-                <%= hidden_field_tag("item_id", invoice_item.id) %>
-                <%= select_tag(:status, options_for_select(["pending", "packaged", "shipped"], params[:status]), include_blank: "Update Status") %>
-                <%= submit_tag("Update") %>
-                <% end %>
-            <% if invoice_item.bulk_discount_id.nil? == false %>
-                <p> <%=link_to("#{invoice_item.bulk_discount_name} Discount Page", merchant_bulk_discount_path(invoice_item.item.merchant.id, invoice_item.bulk_discount_id))%>  </p>
-                <p>Amount Saved: <%= number_to_currency(invoice_item.amount_saved)%></p>
-                <% end %>
-        </li>
-    </ul>
+<div class="nav-container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <p class="navbar-text">Admin</p>
+        <ul class="nav navbar-nav">
+            <li><%= link_to 'Dashboard', admin_dashboard_index_url, class: 'link_1', style: 'pull-right' %>
+            <li><%= link_to 'Merchants', admin_merchants_url, class: 'link_1', style: 'pull-right' %>
+            <li><%= link_to 'Invoices', admin_invoices_url, class: 'link_1', style: 'pull-right' %>
+        </ul>
+    </nav>
 </div>
-<% end %>
 
-<h3> Revenue</h3>
-<p>Excluding Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>
-<p>Including Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_including_discounts)%></p>
+<div class="container">
+    <div class="row header">
+        <div class="col-lg-12 text-center">
+            <h1><%= "Invoice ##{@invoice.id}" %></h1>
+        </div>
+    </div>
+    <p><%= form_with url: "/admin/invoices/#{@invoice.id}", method: :patch do |f| %>
+        <%= f.label :status%>
+        <%= f.select :status, options_for_select(Invoice.all.map(&:status).uniq, @invoice.status), {}, { class: "form form-group form-control" }%>
+        <%= submit_tag("Update Invoice", class:"btn btn-default") %>
+        <% end %> <p>
+            <p>Created on: <%= date_formatter(@invoice.created_at) %></p>
+            <h3> Revenue</h3>
+            <p>Excluding Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>
+            <p>Including Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_including_discounts)%></p>
+            <h3> Customer: </h3>
+            <p><%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
+            <h3>Items on this Invoice</h3>
+            <table class="table">
+                <thead>
+                    <th> Item Name</th>
+                    <th> Quantity</th>
+                    <th> Original Unit Price</th>
+                    <th> Unit Price</th>
+                    <th> Discount (if avaliable)</th>
+                    <th> Status</th>
+                </thead>
+                <% @invoice.invoice_items.each do |invoice_item| %>
+                <tr>
+                    <td><%= invoice_item.item.name %></td>
+                    <td><%= invoice_item.quantity %></td>
+                    <td><%= number_to_currency(invoice_item.item.unit_price) %></td>
+                    <td><%= number_to_currency(invoice_item.unit_price) %></td>
+                    <td> <%= link_to("#{invoice_item.bulk_discount_percentage}% Discount", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.bulk_discount_id)) if invoice_item.bulk_discount_id.present? %></td>
+                    <td> <%=invoice_item.status%></td>
+                </tr>
+
+                <% end %>
+
+            </table>
+
+
+            
