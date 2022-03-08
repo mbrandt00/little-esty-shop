@@ -1,36 +1,48 @@
-<h1><%= @merchant.name%>'s Bulk Discounts</h1>
-
-<h3>Upcoming Holidays</h3>
-<ol>
-<% service =  NagerApi.new%>
-    <% service.next_three_holidays.each_with_index do |holiday, index| %>
-        <div id = "holiday-<%=index%>"> 
-            <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
-            <% if @discounts.map(&:date).include?(holiday[:date])%>
-                <%= link_to("View Discount", merchant_bulk_discount_path(@merchant, (@discounts.where(date: holiday[:date]).first)))%>
-            <% else %>
-            <%= link_to("Create Discount", new_merchant_bulk_discount_path(date: holiday[:date])) %> 
-            
-            <% end %>
-            
+<%= render 'partials/merchant_navbar'%>
+<div class="container">
+    <div class="row header">
+        <div class="col-lg-12 text-center">
+            <h1>Bulk Discounts</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <div class="holidays">
+                <h3>Upcoming Holidays</h3>
+                <ol>
+                    <% service =  NagerApi.new%>
+                    <% service.next_three_holidays.each_with_index do |holiday, index| %>
+                    <div id="holiday-<%=index%>">
+                        <li><b><%= holiday[:name]%> </b> Date: <%=(holiday[:date])%> </li>
+                        <% if @discounts.map(&:date).include?(holiday[:date])%>
+                        <%= link_to("View Discount", merchant_bulk_discount_path(@merchant, (@discounts.where(date: holiday[:date]).first)))%>
+                        <% else %>
+                        <%= link_to("Create Discount", new_merchant_bulk_discount_path(date: holiday[:date])) %>
+                        <% end %>
+                    </div>
+                    <% end %>
+                </ol>
             </div>
-        <% end %>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <div class="Discounts">
+                <h3>Discounts</h3>
+                <%= link_to("Create Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/new") %>
+                <% @discounts.each_with_index do |discount, index| %>
+                <div id="discount-<%=index%>">
+                    <ul>
+                        <li><%= link_to("View Discount", merchant_bulk_discount_path(@merchant, discount)) %></li>
+                        <li>Discount: <%=discount.name%></li>
+                        <li>Threshold: <%=discount.threshold%></li>
+                        <li>Discount Percentage: <%=discount.discount%></li>
+                        <%= button_to("Delete Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{discount.id}", method: :delete)%>
+                    </ul>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
 
-        
-</ol>
-<div class = "Discounts">
-<h3>Discounts</h3>
-<% @discounts.each_with_index do |discount, index| %>
-    <div id = "discount-<%=index%>">
-    <ul>
-        <li><%= link_to("View Discount", merchant_bulk_discount_path(@merchant, discount)) %></li>
-        <li>Discount: <%=discount.name%></li>
-        <li>Threshold: <%=discount.threshold%></li>
-        <li>Discount Percentage: <%=discount.discount%></li>
-        <%= button_to("Delete Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{discount.id}", method: :delete)%>
-    </ul>
-</div>
-<% end %>
-</div>
 
-<%= link_to("Create Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/new") %>
+
+</div>

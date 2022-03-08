@@ -7,8 +7,8 @@ RSpec.describe 'Dashboard Index' do
   end
   it 'will have a link to the admin merchants index page' do
     visit(admin_dashboard_index_url)
-    expect(page).to have_link('Merchants')
-    click_link('Merchants')
+    expect(page).to have_link('Admin Merchants')
+    click_link('Admin Merchants')
     expect(current_path).to eq('/admin/merchants')
   end
   it 'will have a link to the admin invoices index page' do

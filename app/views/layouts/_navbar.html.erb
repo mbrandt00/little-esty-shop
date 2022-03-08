@@ -13,9 +13,8 @@
           <a class="nav-link" href="/admin/invoices">Admin Invoices</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Merchant
-            Dashboards</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Merchants</a>
+          <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
             <%= Merchant.all.select(:id, :name).each do |merchant| %>
             <a class="dropdown-item" href=<%="/merchants/#{merchant.id}/dashboard"%>><%=merchant.name%></a>
             <% end %>

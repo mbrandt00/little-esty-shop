@@ -1,13 +1,21 @@
-<h1><%= @discount.name %> bulk discount show page</h1>
+<%= render 'partials/merchant_navbar'%>
 
-<h3>Information</h3>
-
-<ul>
-    <li>Threshold: <%= @discount.threshold %></li>
-    <li>Discount Percentage: <%= @discount.discount %></li>
-</ul>
-<p>
-<%= link_to("Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @discount))%><br>
-<br>
-<%= link_to("Back",merchant_bulk_discounts_path(@merchant))%> <br>
-</p>
+<div class="container">
+    <div class="row header">
+        <div class="col-lg-12 text-center">
+            <h1>Bulk Discount: <%= @discount.name %></h1>
+        </div>
+    </div>
+    <div class = "row"></div>
+        <div class="col d-flex justify-content-center">
+            <p>
+                Threshold: <%= @discount.threshold %> <br>
+                Discount Percentage: <%= @discount.discount %> <br>
+                <%= link_to("Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @discount))%><br>
+                <br>
+            </p>
+        </div>
+        <%= link_to("Back", url_for(:back))%>
+    </div>
+    
+</div>
