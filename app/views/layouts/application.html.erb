@@ -16,9 +16,7 @@
         <%= msg %>
       </div>
     <% end %>
-    <%= link_to "Home", "/" %>
-    <%= link_to "Merchants (Admin)", "/admin/merchants" %>
-    <%= link_to "Invoices (Admin)", "/admin/invoices" %>
+    <%= render "layouts/navbar"%>
     <%= yield %>
     </div>
   

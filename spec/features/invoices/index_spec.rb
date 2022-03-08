@@ -13,9 +13,6 @@ RSpec.describe 'merchants invoices index' do
     invoice_item_2 = create(:invoice_item, item_id: item_2.id, invoice_id: invoice_2.id)
 
     visit "/merchants/#{merchant_1.id}/invoices"
-
-    expect(page).to have_content("Merchant's Invoices")
-    expect(page).to have_content('Invoice')
     expect(page).to have_content(invoice_1.id)
   end
 

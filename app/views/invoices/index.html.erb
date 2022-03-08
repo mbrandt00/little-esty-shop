@@ -1,6 +1,13 @@
-<h1>Merchant's Invoices</h1>
-<%= render partial: 'sortable' %>
+<%= render 'partials/merchant_navbar'%>
 
+<%= render partial: 'sortable' %>
+<div class = "container">
+<div class="row header">
+    <div class="col-lg-12 text-center">
+      <h1><%=@merchant.name%>'s Invoices</h1>
+    </div>
+  </div>
 <% @invoices.each do |invoice| %>
   <p>Invoice: <%= link_to invoice.id, "/merchants/#{@merchant.id}/invoices/#{invoice.id}" %></p>
 <% end %>
+</div>

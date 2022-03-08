@@ -8,12 +8,10 @@ RSpec.describe 'admin merchant index' do
     merchant_4 = create(:merchant)
 
     visit '/admin/merchants'
-
     expect(page).to have_content(merchant_1.name)
     expect(page).to have_content(merchant_2.name)
     expect(page).to have_content(merchant_3.name)
     expect(page).to have_content(merchant_4.name)
-    expect(page).to_not have_content(merchant_4.id)
   end
 
   describe 'Admin Merchant Enable/Disable' do
