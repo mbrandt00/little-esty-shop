@@ -79,7 +79,6 @@ RSpec.describe 'merchants invoices show page' do
     end
 
     within("##{invoice_item_2.id}") do
-
       select invoice_item_2.status.to_s
       select('pending')
       expect(page).to have_button('Update Item Status')
@@ -92,7 +91,7 @@ RSpec.describe 'merchants invoices show page' do
 
     expect(current_path).to eq("/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}")
   end
-  it 'will have links to the bulk discount if applicable' do 
+  it 'will have links to the bulk discount if applicable' do
     merchant_1 = create(:merchant)
     bulk_discount = create(:bulk_discount, name: 'test', threshold: 5, discount: 10, merchant: merchant_1)
     customer_1 = create(:customer)
@@ -100,9 +99,9 @@ RSpec.describe 'merchants invoices show page' do
     invoice_1 = create(:invoice, customer_id: customer_1.id)
     invoice_item_1 = create(:invoice_item, item_id: item_1.id, invoice_id: invoice_1.id, quantity: 15)
     visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
-    within "##{invoice_item_1.id}" do 
-      expect(page).to have_link("10% Discount")
-      click_link("10% Discount")
+    within "##{invoice_item_1.id}" do
+      expect(page).to have_link('10% Discount')
+      click_link('10% Discount')
       expect(current_path).to eq(merchant_bulk_discount_path(merchant_1, bulk_discount))
     end
   end

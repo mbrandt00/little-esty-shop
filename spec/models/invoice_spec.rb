@@ -20,21 +20,26 @@ RSpec.describe Invoice, type: :model do
     end
 
     describe 'revenues' do
-      before :each do 
+      before :each do
         @merchant = create(:merchant)
         @invoice = create(:invoice)
-        @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'small discount', merchant: @merchant)
-        @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'large discount', merchant: @merchant)
+        @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'small discount',
+                                                  merchant: @merchant)
+        @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'large discount',
+                                                  merchant: @merchant)
         @item_1 = create(:item, name: 'Cupcake', merchant: @merchant, unit_price: 10)
         @item_2 = create(:item, name: 'Cake', merchant: @merchant, unit_price: 10)
-        @invoice_item_1 = create(:invoice_item, unit_price: 10, quantity: 5, status: 'pending', item: @item_1, invoice: @invoice)
-        @invoice_item_2 = create(:invoice_item, unit_price: 10, quantity: 1, status: 'pending', item: @item_2, invoice: @invoice)
-        @invoice_item_3 = create(:invoice_item, unit_price: 10, quantity: 30, status: 'pending', item: @item_2, invoice: @invoice)
+        @invoice_item_1 = create(:invoice_item, unit_price: 10, quantity: 5, status: 'pending', item: @item_1,
+                                                invoice: @invoice)
+        @invoice_item_2 = create(:invoice_item, unit_price: 10, quantity: 1, status: 'pending', item: @item_2,
+                                                invoice: @invoice)
+        @invoice_item_3 = create(:invoice_item, unit_price: 10, quantity: 30, status: 'pending', item: @item_2,
+                                                invoice: @invoice)
       end
       it 'can calculate the total revenue of each invoice including discounts' do
         expect(@invoice.total_revenue_including_discounts).to eq(295)
       end
-      it 'can calculate the total revenue excluding discounts' do 
+      it 'can calculate the total revenue excluding discounts' do
         expect(@invoice.total_revenue_excluding_discounts).to eq(360)
       end
     end

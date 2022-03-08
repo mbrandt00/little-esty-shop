@@ -68,11 +68,11 @@ RSpec.describe 'merchant dashboard' do
     transaction_20 = create(:transaction, invoice_id: invoice_6.id)
   end
 
-  it 'will have a link to the bulk discounts' do 
+  it 'will have a link to the bulk discounts' do
     merchant = create(:merchant)
     visit "/merchants/#{merchant.id}/dashboard"
-    expect(page).to have_link("View Bulk Discounts")
-    click_link("View Bulk Discounts")
+    expect(page).to have_link('View Bulk Discounts')
+    click_link('View Bulk Discounts')
     expect(current_path).to eq("/merchants/#{merchant.id}/bulk_discounts")
   end
 end

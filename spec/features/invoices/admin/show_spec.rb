@@ -30,13 +30,13 @@ RSpec.describe 'Admin Invoices Show Page' do
   describe "change item on invoice's status" do
     it 'will have a dropdown to update item status' do
       visit(admin_invoice_url(@invoice.id))
-      within ".form1" do 
+      within '.form1' do
         expect(page).to have_select('status')
       end
     end
   end
   describe 'bulk discounts' do
-    before :each do 
+    before :each do
       @merchant = create(:merchant)
       @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'discount a', merchant: @merchant)
       @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'discount b', merchant: @merchant)
@@ -47,15 +47,15 @@ RSpec.describe 'Admin Invoices Show Page' do
       @small_invoice_item = create(:invoice_item, quantity: 5, unit_price: 10, invoice: @invoice, item: @item_2)
       @large_invoice_item = create(:invoice_item, quantity: 20, unit_price: 10, invoice: @invoice, item: @item_1)
     end
-    it 'will have a link to the bulk discount applied to an invoice item' do 
+    it 'will have a link to the bulk discount applied to an invoice item' do
       visit(admin_invoice_url(@invoice))
-      within ".table" do
-        expect(page).to have_link("10% Discount")
-        click_link("10% Discount")
+      within '.table' do
+        expect(page).to have_link('10% Discount')
+        click_link('10% Discount')
         expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @bulk_discount_1))
       end
     end
-    it 'will list show revenue with the discount' do 
+    it 'will list show revenue with the discount' do
       visit(admin_invoice_url(@invoice))
       expect(page).to have_content(number_to_currency(@invoice.total_revenue_including_discounts))
     end

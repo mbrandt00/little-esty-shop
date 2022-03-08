@@ -97,7 +97,7 @@ RSpec.describe Item, type: :model do
         best_day = @item_1.best_day
         expect(best_day[0].created_at).to eq('2012-03-21 14:54:09')
       end
-      it 'can return the best discount an item has by quantity' do 
+      it 'can return the best discount an item has by quantity' do
         merchant = create(:merchant, name: 'Jeff')
         item_1 = create(:item, name: 'Yo-yo', merchant: merchant)
         small_bulk_discount = merchant.bulk_discounts.create(threshold: 5, discount: 10, name: 'discount a')
