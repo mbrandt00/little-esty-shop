@@ -46,8 +46,7 @@ RSpec.describe 'merchants invoices show page' do
     invoice_item_3 = create(:invoice_item, item_id: item_3.id, invoice_id: invoice_1.id)
 
     visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
-
-    expect(page).to have_content('Invoice Item Information')
+    expect(page).to have_content("Invoice ##{invoice_1.id}")
     expect(page).to have_content(item_1.name)
     expect(page).to have_content(invoice_item_1.quantity)
     expect(page).to have_content(item_1.unit_price)
@@ -81,13 +80,14 @@ RSpec.describe 'merchants invoices show page' do
     end
 
     within("##{invoice_item_2.id}") do
+
       select invoice_item_2.status.to_s
-      select('shipped')
+      select('pending')
       expect(page).to have_button('Update Item Status')
 
       click_button 'Update Item Status'
-      expect(page).to have_select(selected: 'shipped')
-      expect(page).to_not have_select(selected: 'pending')
+      expect(page).to have_select(selected: 'pending')
+      expect(page).to_not have_select(selected: 'shipped')
       expect(page).to_not have_select(selected: 'packaged')
     end
 
@@ -102,8 +102,8 @@ RSpec.describe 'merchants invoices show page' do
     invoice_item_1 = create(:invoice_item, item_id: item_1.id, invoice_id: invoice_1.id, quantity: 15)
     visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
     within "##{invoice_item_1.id}" do 
-      expect(page).to have_link("Bulk Discount Link")
-      click_link("Bulk Discount Link")
+      expect(page).to have_link("10% Discount")
+      click_link("10% Discount")
       expect(current_path).to eq(merchant_bulk_discount_path(merchant_1, bulk_discount))
     end
   end

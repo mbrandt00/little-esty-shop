@@ -17,9 +17,11 @@
     </div>
     <p><%= form_with url: "/admin/invoices/#{@invoice.id}", method: :patch do |f| %>
         <%= f.label :status%>
+        <div class = "form1">
         <%= f.select :status, options_for_select(Invoice.all.map(&:status).uniq, @invoice.status), {}, { class: "form form-group form-control" }%>
         <%= submit_tag("Update Invoice", class:"btn btn-default") %>
         <% end %> <p>
+        </div>
             <p>Created on: <%= date_formatter(@invoice.created_at) %></p>
             <h3> Revenue</h3>
             <p>Excluding Bulk Discounts: <%=number_to_currency(@invoice.total_revenue_excluding_discounts)%></p>

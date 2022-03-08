@@ -17,14 +17,6 @@ RSpec.describe InvoiceItem, type: :model do
   end
 
   describe 'instance methods' do
-    describe 'change_status(result)' do
-      it 'can change status of invoice item' do
-        invoice_item_1 = create(:invoice_item, status: 'pending')
-        expect(invoice_item_1.status).to eq('pending')
-        invoice_item_1.change_status('packaged')
-        expect(invoice_item_1.status).to eq('packaged')
-      end
-    end
     describe 'bulk discounts' do 
       before :each do 
         @merchant = create(:merchant)
