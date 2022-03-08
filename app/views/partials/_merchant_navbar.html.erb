@@ -1,0 +1,9 @@
+<div class="nav-container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <ul class="nav navbar-nav ml-auto mb-2 mb-lg-0">
+      <li><%= link_to 'Dashboard', "/merchants/#{@merchant.id}/dashboard", class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Items', merchant_merchant_items_path(@merchant), class: 'link_1', style: 'pull-right' %>
+      <li><%= link_to 'Invoices', merchant_invoices_path(@merchant), class: 'link_1', style: 'pull-right' %>
+    </ul>
+  </nav>
+</div>
