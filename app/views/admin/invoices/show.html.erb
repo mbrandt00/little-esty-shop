@@ -5,10 +5,16 @@
         </div>
     </div>
     <p><%= form_with url: "/admin/invoices/#{@invoice.id}", method: :patch do |f| %>
-        <%= f.label :status%>
         <div class = "form1">
-        <%= f.select :status, options_for_select(Invoice.all.map(&:status).uniq, @invoice.status), {}, { class: "form form-group form-control" }%>
-        <%= submit_tag("Update Invoice", class:"btn btn-default") %>
+        <% if @invoice.status != 'completed' %>
+        <%= f.label :status%>
+            <%= f.select :status, options_for_select(Invoice.all.map(&:status).uniq, @invoice.status), {}, { class: "form form-group form-control" }%>
+            <%= submit_tag("Update Invoice", class:"btn btn-default") %>
+        <% else %>
+            <p>Status: <%= @invoice.status  %> </p>
+        <% end %>
+        
+        
         <% end %> <p>
         </div>
             <p>Created on: <%= date_formatter(@invoice.created_at) %></p>

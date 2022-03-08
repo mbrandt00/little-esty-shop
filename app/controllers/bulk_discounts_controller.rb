@@ -25,12 +25,14 @@ class BulkDiscountsController < ApplicationController
     def show
         @merchant = Merchant.find(params[:merchant_id])
         @discount = BulkDiscount.find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+        flash[:notice] = "The merchant has deleted that discount."
+        redirect_to action: :index
     end
 
     def update
         bulk_discount = BulkDiscount.find(params[:id])
         bulk_discount.update(bulk_discount_params)
-
         redirect_to(merchant_bulk_discount_path(bulk_discount.merchant, bulk_discount), notice: "Discount Updated")
     end
 

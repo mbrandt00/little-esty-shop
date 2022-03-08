@@ -9,10 +9,20 @@
     <div class = "row"></div>
         <div class="col d-flex justify-content-center">
             <p>
-                Threshold: <%= @discount.threshold %> <br>
-                Discount Percentage: <%= @discount.discount %> <br>
-                <%= link_to("Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @discount))%><br>
+                Threshold: <%= @discount.threshold %> 
                 <br>
+                Discount Percentage: <%= @discount.discount %> 
+                <br>
+                <% if Invoice.pending_with_discount(@discount).count > 0 %>
+                    <%="There are pending invoices that include this discount! Wait until these orders are marked complete to edit." %>
+                    <%="These invoices are:" %>
+                    <% Invoice.pending_with_discount(@discount).each do |invoice| %>
+                        <%=  link_to(invoice.id, admin_invoice_path(invoice))%>
+                        <% end %>
+                <% else %>
+                    <%= link_to("Edit Bulk Discount", edit_merchant_bulk_discount_path(@merchant, @discount))%>
+                    <%= link_to("Delete Bulk Discount", merchant_bulk_discount_path(@merchant, @discount), method: :delete)%>
+                <% end %>
             </p>
         </div>
         <%= link_to("Back", url_for(:back))%>

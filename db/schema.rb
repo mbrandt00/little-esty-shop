@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_06_195125) do
+ActiveRecord::Schema.define(version: 2022_03_08_214159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2022_03_06_195125) do
     t.integer "bulk_discount_id"
     t.integer "bulk_discount_percentage", default: 0
     t.string "bulk_discount_name"
+    t.integer "final_discount_percentage"
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_items_on_item_id"
   end

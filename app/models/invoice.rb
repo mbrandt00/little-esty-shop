@@ -5,9 +5,10 @@ class Invoice < ApplicationRecord
   validates :customer_id, presence: true
   validates :status, presence: true
 
-  enum status: { 'in progress' => 0, completed: 1, cancelled: 2 }
+  enum status: { inprogress: 0, completed: 1, cancelled: 2 }
 
   before_validation :integer_status
+  after_save :record_discount
 
   def created_at_date
     created_at.strftime('%A, %B %d, %Y')
@@ -29,8 +30,14 @@ class Invoice < ApplicationRecord
       .order('invoices.created_at')
   end
 
-    def change_status(result)
-    self.status = 0 if result == 'in progress'
+  def self.pending_with_discount(discount)
+    joins(:invoice_items).
+    where('invoice_items.bulk_discount_id = ?', discount.id).
+    where(status: 0)
+  end
+
+  def change_status(result)
+    inprogress! if result == 'inprogress'
     completed! if result == 'completed'
     cancelled! if result == 'cancelled'
   end
@@ -41,5 +48,13 @@ class Invoice < ApplicationRecord
     self.status = 0 if status == 'in progress'
     self.status = 1 if status == 'completed'
     self.status = 2 if status == 'cancelled'
+  end
+
+  def record_discount 
+    if self.completed? 
+      invoice_items.each do |invoice_item|
+        invoice_item.final_discount_percentage = invoice_item.bulk_discount_percentage
+      end
+    end
   end
 end

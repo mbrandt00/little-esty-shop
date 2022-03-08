@@ -18,13 +18,13 @@ validates :item_id, presence: true, numericality: true
     self.bulk_discount_id = bulk_discount.id
     self.bulk_discount_percentage = bulk_discount.discount
     self.bulk_discount_name = bulk_discount.name
+    self.unit_price = (self.unit_price * (1- bulk_discount_percentage/100.to_f))
   end
 
   def apply_discount
     best_discount = item.best_discount(quantity)
     if best_discount.any?
       set_discount(best_discount.first)
-      self.unit_price = (self.unit_price * (1- bulk_discount_percentage/100.to_f))
     end
   end
   
