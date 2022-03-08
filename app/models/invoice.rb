@@ -18,8 +18,8 @@ class Invoice < ApplicationRecord
     invoice_items.sum('invoice_items.unit_price * invoice_items.quantity')
   end
 
-  def total_revenue_excluding_discounts 
-    invoice_items.joins(:item).group(:id).sum('items.unit_price * invoice_items.quantity').sum{|h,k| k}
+  def total_revenue_excluding_discounts
+    invoice_items.joins(:item).group(:id).sum('items.unit_price * invoice_items.quantity').sum { |_h, k| k }
   end
 
   def self.incomplete_invoices
@@ -31,9 +31,9 @@ class Invoice < ApplicationRecord
   end
 
   def self.pending_with_discount(discount)
-    joins(:invoice_items).
-    where('invoice_items.bulk_discount_id = ?', discount.id).
-    where(status: 0)
+    joins(:invoice_items)
+      .where('invoice_items.bulk_discount_id = ?', discount.id)
+      .where(status: 0)
   end
 
   def change_status(result)
@@ -50,8 +50,8 @@ class Invoice < ApplicationRecord
     self.status = 2 if status == 'cancelled'
   end
 
-  def record_discount 
-    if self.completed? 
+  def record_discount
+    if completed?
       invoice_items.each do |invoice_item|
         invoice_item.final_discount_percentage = invoice_item.bulk_discount_percentage
       end

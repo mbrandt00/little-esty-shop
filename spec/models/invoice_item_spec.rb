@@ -7,8 +7,6 @@ RSpec.describe InvoiceItem, type: :model do
     it { should validate_presence_of :unit_price }
     it { should validate_presence_of :status }
     it { should validate_presence_of :quantity }
-
-
   end
 
   describe 'relationships' do
@@ -17,11 +15,13 @@ RSpec.describe InvoiceItem, type: :model do
   end
 
   describe 'instance methods' do
-    describe 'bulk discounts' do 
-      before :each do 
+    describe 'bulk discounts' do
+      before :each do
         @merchant = create(:merchant)
-        @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'small discount', merchant: @merchant)
-        @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'large discount', merchant: @merchant)
+        @bulk_discount_1 = create(:bulk_discount, threshold: 5, discount: 10, name: 'small discount',
+                                                  merchant: @merchant)
+        @bulk_discount_2 = create(:bulk_discount, threshold: 15, discount: 20, name: 'large discount',
+                                                  merchant: @merchant)
         @item_1 = create(:item, name: 'Cupcake', merchant: @merchant)
         @item_2 = create(:item, name: 'Cake', merchant: @merchant)
         @invoice_item_1 = create(:invoice_item, unit_price: 10, quantity: 5, status: 'pending', item: @item_1)
@@ -37,10 +37,10 @@ RSpec.describe InvoiceItem, type: :model do
       it 'will add the best discount to each invoice item' do
         expect(@invoice_item_1.unit_price).to eq(9.0)
       end
-      it 'wont change the unit price if there is no applicable bulk discount' do 
+      it 'wont change the unit price if there is no applicable bulk discount' do
         expect(@invoice_item_2.unit_price).to eq(10)
       end
-      it 'will apply the best discount avaliable' do 
+      it 'will apply the best discount avaliable' do
         expect(@invoice_item_3.unit_price).to eq(8)
       end
     end

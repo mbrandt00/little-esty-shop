@@ -50,6 +50,6 @@ class GitHubApi
     repos = github.map do |repo|
       Repo.new(repo)
     end
-    repos.find { |repo| repo.name == "mbrandt00/little-esty-shop" }
+    repos.find { |repo| repo.name == 'mbrandt00/little-esty-shop' }
   end
 end

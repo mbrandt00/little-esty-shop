@@ -20,18 +20,18 @@ class Merchant < ApplicationRecord
   end
 
   def favorite_customers
-      transactions.joins(invoice: :customer)
+    transactions.joins(invoice: :customer)
                 .where('result = ?', 0)
-                .where("invoices.status = ?", 1)
+                .where('invoices.status = ?', 1)
                 .select("customers.*, count('transactions.result') as top_result")
                 .group('customers.id')
                 .order(top_result: :desc)
                 .distinct
                 .limit(5)
-  end                  
+  end
 
   def items_ready_to_ship
-    item_ids = InvoiceItem.where("status = 1 OR status = 2").order(:created_at).pluck(:item_id)
+    item_ids = InvoiceItem.where('status = 1 OR status = 2').order(:created_at).pluck(:item_id)
     item_ids.map do |id|
       Item.find(id)
     end
