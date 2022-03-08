@@ -3,18 +3,18 @@ require 'rails_helper'
 RSpec.describe 'Dashboard Index' do
   it 'will have a header indicating that this is the admin dashboard page' do
     visit(admin_dashboard_index_url)
-    expect(page).to have_content('Admin Dashboard')
+    expect(page).to have_content('Dashboard')
   end
   it 'will have a link to the admin merchants index page' do
     visit(admin_dashboard_index_url)
-    expect(page).to have_link('Admin Merchants Index')
-    click_link('Admin Merchants Index')
+    expect(page).to have_link('Merchants')
+    click_link('Merchants')
     expect(current_path).to eq('/admin/merchants')
   end
   it 'will have a link to the admin invoices index page' do
     visit(admin_dashboard_index_url)
-    expect(page).to have_link('Admin Invoices Index')
-    click_link('Admin Invoices Index')
+    expect(page).to have_link('Invoices')
+    click_link('Invoices')
     expect(current_path).to eq('/admin/invoices')
   end
   describe 'top customers' do
@@ -41,7 +41,7 @@ RSpec.describe 'Dashboard Index' do
       within '.top_customers' do
         expect(page).to have_content(@customer_1.first_name)
         expect(page).to have_content(@customer_1.last_name)
-        expect(page).to have_content('Successful Transactions: 3')
+        expect(page).to have_content('3')
       end
     end
   end

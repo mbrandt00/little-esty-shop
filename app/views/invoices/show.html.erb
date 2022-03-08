@@ -33,7 +33,9 @@
       <th> Discount (if avaliable)</th>
       <th> Status</th>
     </thead>
+   
     <% @invoice.invoice_items.each do |invoice_item| %>
+     <div id = <%= invoice_item.id%>> 
     <tr>
       <td><%= invoice_item.item.name %></td>
       <td><%= invoice_item.quantity %></td>
@@ -42,11 +44,12 @@
       <td> <%= link_to("#{invoice_item.bulk_discount_percentage}% Discount", merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.bulk_discount_id)) if invoice_item.bulk_discount_id.present? %></td>
       <td> <%= form_with url: "/merchants/#{@merchant.id}/invoices/#{@invoice.id}", method: :patch do |f| %>
         
-        <%= f.select :status, options_for_select(@invoice.invoice_items.map(&:status).uniq, invoice_item.status), {}, { class: "form form-group form-control" } %>
+        <%= f.select :status, options_for_select(["pending", "packaged", "shipped"], invoice_item.status), {}, { class: "form form-group form-control" } %>
         <%= hidden_field_tag "invoice_item_id", "#{invoice_item.id}" %>
         <%= f.submit 'Update Item Status', class:"btn btn-default" %>
         <% end %> </td>
     </tr>
+    </div>
     <% end %>
   </table>
 </div>

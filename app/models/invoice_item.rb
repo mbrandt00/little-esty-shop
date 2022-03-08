@@ -27,10 +27,6 @@ validates :item_id, presence: true, numericality: true
       self.unit_price = (self.unit_price * (1- bulk_discount_percentage/100.to_f))
     end
   end
-
-  def amount_saved
-    (item.unit_price - self.unit_price) * quantity
-  end
   
   private
 

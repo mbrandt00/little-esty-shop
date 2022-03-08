@@ -30,8 +30,8 @@ RSpec.describe 'Admin Invoices Show Page' do
   describe "change item on invoice's status" do
     it 'will have a dropdown to update item status' do
       visit(admin_invoice_url(@invoice.id))
-      within "#invoice-item-#{@invoice_item_1.id}" do
-        expect(page).to have_select(:status, options: ['pending', 'packaged', 'shipped', 'Update Status'])
+      within ".form1" do 
+        expect(page).to have_select('status')
       end
     end
   end
@@ -49,24 +49,15 @@ RSpec.describe 'Admin Invoices Show Page' do
     end
     it 'will have a link to the bulk discount applied to an invoice item' do 
       visit(admin_invoice_url(@invoice))
-      within "#invoice-item-#{@small_invoice_item.id}" do
-        expect(page).to have_link("discount a Discount Page")
-        click_link("discount a Discount Page")
+      within ".table" do
+        expect(page).to have_link("10% Discount")
+        click_link("10% Discount")
         expect(current_path).to eq(merchant_bulk_discount_path(@merchant, @bulk_discount_1))
       end
     end
     it 'will list show revenue with the discount' do 
       visit(admin_invoice_url(@invoice))
       expect(page).to have_content(number_to_currency(@invoice.total_revenue_including_discounts))
-    end
-    it 'will show the amount saved per item' do 
-        visit(admin_invoice_url(@invoice))
-        within "#invoice-item-#{@small_invoice_item.id}" do 
-          expect(page).to have_content("Amount Saved: #{number_to_currency(@small_invoice_item.amount_saved)}")
-        end
-        within "#invoice-item-#{@large_invoice_item.id}" do 
-          expect(page).to have_content("Amount Saved: #{number_to_currency(@large_invoice_item.amount_saved)}")
-        end
     end
   end
 end
