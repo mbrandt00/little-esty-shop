@@ -15,8 +15,7 @@ RSpec.describe 'merchants invoices show page' do
     invoice_item_2 = create(:invoice_item, item_id: item_2.id, invoice_id: invoice_2.id)
 
     visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
-
-    expect(page).to have_content('Invoice Information')
+    expect(page).to have_content("Invoice ##{invoice_1.id}")
     expect(page).to have_content(invoice_1.id)
     expect(page).to have_content(invoice_1.status)
     expect(page).to have_content(invoice_1.created_at_date)

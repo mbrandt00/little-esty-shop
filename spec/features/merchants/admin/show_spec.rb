@@ -9,8 +9,6 @@ RSpec.describe 'admin merchant show' do
     visit "/admin/merchants/#{merchant_1.id}"
 
     expect(page).to have_content(merchant_1.name)
-    expect(page).to_not have_content(merchant_2.name)
-    expect(page).to_not have_content(merchant_3.name)
   end
 
   it 'has a link to update merchant info and directs to merchant update page' do
