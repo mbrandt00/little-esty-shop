@@ -105,4 +105,20 @@ RSpec.describe 'merchants invoices show page' do
       expect(current_path).to eq(merchant_bulk_discount_path(merchant_1, bulk_discount))
     end
   end
+  it 'can change the status of an invoice' do 
+    merchant_1 = create(:merchant)
+    item_1 = create(:item, merchant_id: merchant_1.id)
+    invoice_1 = create(:invoice)
+    invoice_item_1 = create(:invoice_item, item_id: item_1.id, invoice_id: invoice_1.id, quantity: 15, status: 'pending')
+    visit "/merchants/#{merchant_1.id}/invoices/#{invoice_1.id}"
+    within "##{invoice_item_1.id}" do 
+      expect(page).to have_select(:status)
+      select "packaged", from: :status
+      click_button("Update Item Status")
+      expect(page).to have_select(:status, selected: 'packaged')
+      select "shipped", from: :status
+      click_button("Update Item Status")
+      expect(page).to have_select(:status, selected: 'shipped')
+    end
+  end
 end

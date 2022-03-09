@@ -2,7 +2,7 @@ require 'rails_helper'
 include ActionView::Helpers::NumberHelper
 RSpec.describe 'Admin Invoices Show Page' do
   before(:each) do
-    @invoice = create(:invoice)
+    @invoice = create(:invoice, status:  'inprogress')
     @invoice_item_1 = create(:invoice_item, invoice_id: @invoice.id)
     @invoice_item_2 = create(:invoice_item, invoice_id: @invoice.id)
   end
@@ -27,14 +27,6 @@ RSpec.describe 'Admin Invoices Show Page' do
     visit(admin_invoice_url(@invoice.id))
     expect(page).to have_content(number_to_currency(@invoice.total_revenue_excluding_discounts))
   end
-  describe "change item on invoice's status" do
-    it 'will have a dropdown to update item status' do
-      visit(admin_invoice_url(@invoice.id))
-      within '.form1' do
-        expect(page).to have_select('status')
-      end
-    end
-  end
   describe 'bulk discounts' do
     before :each do
       @merchant = create(:merchant)
@@ -58,6 +50,18 @@ RSpec.describe 'Admin Invoices Show Page' do
     it 'will list show revenue with the discount' do
       visit(admin_invoice_url(@invoice))
       expect(page).to have_content(number_to_currency(@invoice.total_revenue_including_discounts))
+    end
+    it 'can update the status of an invoice' do 
+      invoice_1 = create(:invoice, status: 'inprogress')
+      invoice = create(:invoice, status: 'completed')
+      invoice = create(:invoice, status: 'cancelled')
+      visit(admin_invoice_url(invoice_1))
+      within ".form1" do 
+        expect(page).to have_select(:status)
+        select "cancelled", from: :status
+        click_button("Update Invoice")
+        expect(page).to have_select(:status, selected: 'cancelled')
+      end
     end
   end
 end

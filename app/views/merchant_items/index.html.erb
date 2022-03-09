@@ -29,11 +29,13 @@
         <% end %>
         <h3> Disabled Items </h3>
         <% @merchant.items.disabled.each do |item| %>
+        <div id = <%= item.id%>>
         <p>
           <div style="float: left; width: 100%"><%=link_to(item.name, merchant_merchant_item_path(@merchant,item))%>
           </div>
           <%=button_to("Enable", "/merchants/#{item.merchant.id}/merchant_items/#{item.id}/", method: :patch, name: "status",value: "enable")%>
         </p>
+        </div>
         <% end %>
       </div>
     </div>

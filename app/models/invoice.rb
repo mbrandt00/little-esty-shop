@@ -54,6 +54,7 @@ class Invoice < ApplicationRecord
     if completed?
       invoice_items.each do |invoice_item|
         invoice_item.final_discount_percentage = invoice_item.bulk_discount_percentage
+        invoice_item.save
       end
     end
   end

@@ -5,9 +5,7 @@ class Customer < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
-  def self.transaction_count(id)
-    Customer.find(id).transactions.count
-  end
+
 
   def self.top_customers(count)
     joins(invoices: :transactions)

@@ -43,6 +43,15 @@ RSpec.describe Invoice, type: :model do
         expect(@invoice.total_revenue_excluding_discounts).to eq(360)
       end
     end
+    it 'will change the status of an invoice' do 
+      invoice = create(:invoice, status: 'inprogress')
+      invoice.change_status('completed')
+      expect(invoice.status).to eq('completed')
+      invoice.change_status('inprogress')
+      expect(invoice.status).to eq('inprogress')
+      invoice.change_status('cancelled')
+      expect(invoice.status).to eq('cancelled')
+    end
   end
   describe 'class methods' do
     it '#incomplete_invoices' do
@@ -62,6 +71,27 @@ RSpec.describe Invoice, type: :model do
       expect(incomplete.length).to eq(2)
       expect(incomplete.first).to eq(invoice_1)
       expect(incomplete.second).to eq(invoice_3)
+    end
+    it 'will return invoices that are inprogress and have a bulk discount attached' do 
+            invoice_1 = create(:invoice, status: 'inprogress')
+            invoice_2 = create(:invoice, status: 'inprogress')
+            merchant = create(:merchant)
+            bulk_discount = create(:bulk_discount, threshold: 3, discount: 5, name: 'test_1', merchant: merchant)
+            item_1 = create(:item, merchant: merchant)
+            item_2 = create(:item, merchant: merchant)
+            invoice_item_1 = create(:invoice_item, item: item_1, quantity: 4, invoice: invoice_1)
+            invoice_item_2 = create(:invoice_item, item: item_2, quantity: 2, invoice: invoice_2) #no discount
+            expect(Invoice.pending_with_discount(bulk_discount)).to eq([invoice_1])
+    end
+    it 'will return the final discount even if bulk discount is deleted' do 
+            invoice_1 = create(:invoice, status: 'inprogress')
+            merchant = create(:merchant)
+            bulk_discount = create(:bulk_discount, threshold: 3, discount: 5, name: 'test_1', merchant: merchant)
+            item_1 = create(:item, merchant: merchant)
+            invoice_item_1 = create(:invoice_item, item: item_1, quantity: 4, invoice: invoice_1)
+            expect(invoice_item_1.final_discount_percentage).to eq(nil)
+            invoice_1.completed!
+            expect(invoice_1.invoice_items.first.final_discount_percentage).to eq(5)
     end
 
     it 'can order incomplete_invoices oldest to newest' do

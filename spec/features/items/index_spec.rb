@@ -103,5 +103,15 @@ RSpec.describe 'Item Index page' do
         expect(page).to have_content(@item_1.best_day.first.count)
       end
     end
+    it 'can change the status of an item' do 
+      visit "/merchants/#{@merchant_1.id}/merchant_items"
+      within "##{@item_1.id}" do 
+        expect(page).to have_button("Enable")
+        click_button("Enable")
+      end
+      within ".enabled" do 
+        expect(page).to have_content(@item_1.name)
+      end
+    end
   end
 end
