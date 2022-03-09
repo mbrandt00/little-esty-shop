@@ -1,38 +1,33 @@
-# Little Esty Shop
+# Little Etsy Shop
 
-## Background and Description
+[![forthebadge](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)![forthebadge](https://forthebadge.com/images/badges/works-on-my-machine.svg)
 
-"Little Esty Shop" is a group project that requires students to build a fictitious e-commerce platform where merchants and admins can manage inventory and fulfill customer invoices.
+## About 
 
-## Learning Goals
-- Practice designing a normalized database schema and defining model relationships
-- Utilize advanced routing techniques including namespacing to organize and group like functionality together.
-- Utilize advanced active record techniques to perform complex database queries
-- Practice consuming a public API while utilizing POROs as a way to apply OOP principles to organize code
+The Little Esty(Etsy) shop is an exercise to build a large scale relational database to mimic an ecommerce shop allowing administrators and merchants to fulfill customer invoices. This application tested our ability to:
+1. Create custom rake tasks to parse and ingest CSVs into a PostreSQL database
+2. Build a relational database including 7 tables, including joins tables
+3. Create full CRUD workflows for many of the objects in the database
+4. Create complex SQL and ActiveRecord methods using large sets of data
+5. Create Views to allows users to interact and view the data within the database
+6. Consume multiple public APIs to enhance the users experience
 
-## Requirements
-- must use Rails 5.2.x
-- must use PostgreSQL
-- all code must be tested via feature tests and model tests, respectively
-- must use GitHub branching, team code reviews via GitHub comments, and github projects to track progress on user stories
-- must include a thorough README to describe the project
-- must deploy completed code to Heroku
+## Extensions
 
-## Setup
+- Used ActiveRecord to implement functionality that limits merchants from deleting/editing discounts belonging to invoices that are pending
+- Used ActiveRecord to store pertinent discount information on invoice records for referencing throughout application
+- Create Bulk Discounts for holidays with one click
 
-This project requires Ruby 2.7.4.
+## Local Hosting
+ 
+1. clone this repo to your local machine
+2. run `bundle install`
+3. run `rails db:{create,migrate}`
+4. run `rails rake all` (to load in CSV data)
+3. run `rails server`
+4. go to `http://localhost:3000/` in your browser
 
-* Fork this repository
-* Clone your fork
-* From the command line, install gems and set up your DB:
-    * `bundle`
-    * `rails db:create`
-* Run the test suite with `bundle exec rspec`.
-* Run your development server with `rails s` to see the app in action.
-
-## Phases
-
-1. [Database Setup](./doc/db_setup.md)
-1. [User Stories](./doc/user_stories.md)
-1. [Extensions](./doc/extensions.md)
-1. [Evaluation](./doc/evaluation.md)
+## Web Hosted
+[Hosted on Heroku Here](https://little-etsy-shop-2022.herokuapp.com)
